@@ -11,8 +11,7 @@
  *   Function: min
  *  Function Description: Returns the minimum value of two integers and b.
 */
-int min(int a, int b)
-{
+int min(int a, int b) {
   // START CODE HERE
   // END CODE HERE
 }
@@ -21,18 +20,17 @@ int min(int a, int b)
  *   Function: max
  *   Function Description: Returns the maximum value of two integers and b.
 */
-int max(int a, int b)
-{
+int max(int a, int b) {
   // START CODE HERE
   // END CODE HERE
 }
 
 /*
 /   Function: floor_ss
-/   Function Description: Returns a fixed point value rounded down to the subsample grid.
+/   Function Description: Returns a fixed point value rounded down to the
+subsample grid.
 */
-int floor_ss(int val, int r_shift, int ss_w_lg2)
-{
+int floor_ss(int val, int r_shift, int ss_w_lg2) {
   // START CODE HERE
   // END CODE HERE
 }
@@ -42,11 +40,27 @@ int floor_ss(int val, int r_shift, int ss_w_lg2)
  *  Function Description: Determine a bounding box for the triangle.
  *  Note that this is a fixed point function.
 */
-BoundingBox get_bounding_box(Triangle triangle, Screen screen, Config config)
-{
+BoundingBox get_bounding_box(Triangle triangle, Screen screen, Config config) {
   BoundingBox bbox;
 
   // START CODE HERE
+
+  // Calculate clamped bounding box
+  // ll = lower left , ur = upper right
+  // Min  x rounded down to subsample grid
+  ll_x = FLOOR_SS(MIN(x coordinate of poly vertices));
+  // Max x rounded down to subsample grid
+  ur_x = FLOOR_SS(MAX(x coordinate of poly vertices));
+  // Min y rounded down to subsample grid
+  ll_y = FLOOR_SS(MIN(y coordinate of poly vertices));
+  // Max y rounded down to subsample grid
+  ur_y = FLOOR_SS(MAX(y coordinate of poly vertices));
+  // Clip bounding box to visible screen space
+  ur_x = ur_x > screen_width ? screen_width : ur_x;
+  ur_y = ur_y > screen_height ? screen_height : ur_y;
+  ll_x = ll_x < 0 ? 0 : ll_x;
+  ll_y = ll_y < 0 ? 0 : ll_y;
+
   // initialize bounding box to first vertex
   // iterate over remaining vertices
   // round down to subsample grid
@@ -62,29 +76,48 @@ BoundingBox get_bounding_box(Triangle triangle, Screen screen, Config config)
  *
  *
  */
-bool sample_test(Triangle triangle, Sample sample)
-{
+bool sample_test(Triangle triangle, Sample sample) {
   bool isHit;
-
+  int sample_test(poly, s_x, s_y) {}
   // START CODE HERE
+  // Shift vertices such that sample is origin
+  v0_x = poly.v[0].x - s_x;
+  v0_y = poly.v[0].y - s_y;
+  v1_x = poly.v[1].x - s_x;
+  v1_y = poly.v[1].y - s_y;
+  v2_x = poly.v[2].x - s_x;
+  v2_y = poly.v[2].y - s_y;
+  // Distance of  origin shifted edge
+  dist0 = v0_x * v1_y - v1_x * v0_y; // 0 -1 edge
+  dist1 = v1_x * v2_y - v2_x * v1_y; // 1 -2 edge
+  dist2 = v2_x * v0_y - v0_x * v2_y; // 2 -0 edge
+  // Test if origin is on right side of shifted edge
+  b0 = dist0 <= 0.0;
+  b1 = dist1 < 0.0;
+  b2 = dist2 <= 0.0;
+  // Triangle min terms with no culling
+  // triRes = ( b0 && b1 && b2 ) || (! b0 && ! b1 && ! b2 ) ;
+  // Triangle min terms with backface culling
+  triRes = b0 && bl && b2;
+  return (triRes);
   // END CODE HERE
 
   return isHit;
 }
 
-int rasterize_triangle(Triangle triangle, ZBuff *z, Screen screen, Config config)
-{
+int rasterize_triangle(Triangle triangle, ZBuff *z, Screen screen,
+                       Config config) {
   int hit_count = 0;
 
-  //Calculate BBox
+  // Calculate BBox
   BoundingBox bbox = get_bounding_box(triangle, screen, config);
 
-  //Iterate over samples and test if in triangle
+  // Iterate over samples and test if in triangle
   Sample sample;
-  for (sample.x = bbox.lower_left.x; sample.x <= bbox.upper_right.x; sample.x += config.ss_i)
-  {
-    for (sample.y = bbox.lower_left.y; sample.y <= bbox.upper_right.y; sample.y += config.ss_i)
-    {
+  for (sample.x = bbox.lower_left.x; sample.x <= bbox.upper_right.x;
+       sample.x += config.ss_i) {
+    for (sample.y = bbox.lower_left.y; sample.y <= bbox.upper_right.y;
+         sample.y += config.ss_i) {
 
       Sample jitter = jitter_sample(sample, config.ss_w_lg2);
       jitter.x = jitter.x << 2;
@@ -96,18 +129,18 @@ int rasterize_triangle(Triangle triangle, ZBuff *z, Screen screen, Config config
 
       bool hit = sample_test(triangle, jittered_sample);
 
-      if (hit)
-      {
+      if (hit) {
         hit_count++;
-        if (z != NULL)
-        {
+        if (z != NULL) {
           Sample hit_location;
           hit_location.x = sample.x >> config.r_shift;
           hit_location.y = sample.y >> config.r_shift;
 
           Sample subsample;
-          subsample.x = (sample.x - (hit_location.x << config.r_shift)) / config.ss_i;
-          subsample.y = (sample.y - (hit_location.y << config.r_shift)) / config.ss_i;
+          subsample.x =
+              (sample.x - (hit_location.x << config.r_shift)) / config.ss_i;
+          subsample.y =
+              (sample.y - (hit_location.y << config.r_shift)) / config.ss_i;
 
           Fragment f;
           f.z = triangle.v[0].z;
@@ -124,8 +157,7 @@ int rasterize_triangle(Triangle triangle, ZBuff *z, Screen screen, Config config
   return hit_count;
 }
 
-void hash_40to8(uchar *arr40, ushort *val, int shift)
-{
+void hash_40to8(uchar *arr40, ushort *val, int shift) {
   uchar arr32[4];
   uchar arr16[2];
   uchar arr8;
@@ -147,8 +179,7 @@ void hash_40to8(uchar *arr40, ushort *val, int shift)
   val[0] = mask;
 }
 
-Sample jitter_sample(const Sample sample, const int ss_w_lg2)
-{
+Sample jitter_sample(const Sample sample, const int ss_w_lg2) {
   long x = sample.x >> 4;
   long y = sample.y >> 4;
   uchar arr40_1[5];
