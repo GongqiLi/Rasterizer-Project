@@ -12,6 +12,9 @@
  *  Function Description: Returns the minimum value of two integers and b.
 */
 int min(int a, int b) {
+  if (a < b)
+    return a;
+  return b;
   // START CODE HERE
   // END CODE HERE
 }
@@ -22,6 +25,9 @@ int min(int a, int b) {
 */
 int max(int a, int b) {
   // START CODE HERE
+  if (a > b)
+    return a;
+  return b;
   // END CODE HERE
 }
 
