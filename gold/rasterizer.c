@@ -12,10 +12,11 @@
  *  Function Description: Returns the minimum value of two integers and b.
 */
 int min(int a, int b) {
+  // START CODE HERE
+
   if (a < b)
     return a;
   return b;
-  // START CODE HERE
   // END CODE HERE
 }
 
@@ -38,6 +39,8 @@ subsample grid.
 */
 int floor_ss(int val, int r_shift, int ss_w_lg2) {
   // START CODE HERE
+  val = val >> r_shift;
+  return val;
   // END CODE HERE
 }
 
@@ -48,30 +51,34 @@ int floor_ss(int val, int r_shift, int ss_w_lg2) {
 */
 BoundingBox get_bounding_box(Triangle triangle, Screen screen, Config config) {
   BoundingBox bbox;
-
+  int minx, miny, maxx, maxy;
   // START CODE HERE
-
+  minx = min(triangle.v[0].x, triangle.v[1].x);
+  minx = min(triangle.v[2].x, minx);
+  miny = min(triangle.v[0].y, triangle.v[1].y);
+  miny = min(triangle.v[2].y, miny);
+  maxx = max(triangle.v[0].x, triangle.v[1].x);
+  maxx = max(triangle.v[2].x, maxx);
+  maxy = max(triangle.v[0].y, triangle.v[1].y);
+  maxy = max(triangle.v[2].y, maxy);
   // Calculate clamped bounding box
-  // ll = lower left , ur = upper right
-  // Min  x rounded down to subsample grid
-  ll_x = FLOOR_SS(MIN(x coordinate of poly vertices));
+  // min  x rounded down to subsample grid
+  bbox.lower_left.x = floor_ss(minx, config.r_shift, config.ss_w_lg2);
   // Max x rounded down to subsample grid
-  ur_x = FLOOR_SS(MAX(x coordinate of poly vertices));
-  // Min y rounded down to subsample grid
-  ll_y = FLOOR_SS(MIN(y coordinate of poly vertices));
+  bbox.upper_right.x = floor_ss(maxx, config.r_shift, config.ss_w_lg2);
+  // min y rounded down to subsample grid
+  bbox.lower_left.y = floor_ss(miny, config.r_shift, config.ss_w_lg2);
   // Max y rounded down to subsample grid
-  ur_y = FLOOR_SS(MAX(y coordinate of poly vertices));
+  bbox.upper_right.y = floor_ss(maxy, config.r_shift, config.ss_w_lg2);
   // Clip bounding box to visible screen space
-  ur_x = ur_x > screen_width ? screen_width : ur_x;
-  ur_y = ur_y > screen_height ? screen_height : ur_y;
-  ll_x = ll_x < 0 ? 0 : ll_x;
-  ll_y = ll_y < 0 ? 0 : ll_y;
+  bbox.upper_right.x =
+      bbox.upper_right.x > screen.width ? screen.width : bbox.upper_right.x;
+  bbox.upper_right.y =
+      bbox.upper_right.y > screen.height ? screen.height : bbox.upper_right.y;
+  bbox.lower_left.x = bbox.lower_left.x < 0 ? 0 : bbox.lower_left.x;
+  bbox.lower_left.y = bbox.lower_left.y < 0 ? 0 : bbox.lower_left.y;
+  bbox.valid = true;
 
-  // initialize bounding box to first vertex
-  // iterate over remaining vertices
-  // round down to subsample grid
-  // clip to screen
-  // check if bbox is valid
   // END CODE HERE
   return bbox;
 }
