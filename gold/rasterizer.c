@@ -96,8 +96,8 @@ bool sample_test(Triangle triangle, Sample sample) {
   // START CODE HERE
   // Shift vertices such that sample is origin
   for (int i = 0; i < 3; i++) {
-    w[i].x = triangle.v[i].x - sample.width;
-    w[i].y = triangle.v[i].y - sample.height;
+    w[i].x = triangle.v[i].x - sample.x;
+    w[i].y = triangle.v[i].y - sample.y;
   }
   // Distance of  origin shifted edge
   dist[0] = w[0].x * w[1].y - -w[1].x * w[0].y; // 0 -1 edge
