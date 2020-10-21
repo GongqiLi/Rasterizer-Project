@@ -90,31 +90,29 @@ BoundingBox get_bounding_box(Triangle triangle, Screen screen, Config config) {
  *
  */
 bool sample_test(Triangle triangle, Sample sample) {
-  bool isHit;
-  int sample_test(poly, s_x, s_y) {}
+  bool isHit, b[3];
+  int dist[3];
+  Vertex2D w[3];
   // START CODE HERE
   // Shift vertices such that sample is origin
-  v0_x = poly.v[0].x - s_x;
-  v0_y = poly.v[0].y - s_y;
-  v1_x = poly.v[1].x - s_x;
-  v1_y = poly.v[1].y - s_y;
-  v2_x = poly.v[2].x - s_x;
-  v2_y = poly.v[2].y - s_y;
+  for (int i = 0; i < 3; i++) {
+    w[i].x = triangle.v[i].x - sample.width;
+    w[i].y = triangle.v[i].y - sample.height;
+  }
   // Distance of  origin shifted edge
-  dist0 = v0_x * v1_y - v1_x * v0_y; // 0 -1 edge
-  dist1 = v1_x * v2_y - v2_x * v1_y; // 1 -2 edge
-  dist2 = v2_x * v0_y - v0_x * v2_y; // 2 -0 edge
+  dist[0] = w[0].x * w[1].y - -w[1].x * w[0].y; // 0 -1 edge
+  dist[1] = w[1].x * w[2].y - w[2].x * w[1].y;  // 1 -2 edge
+  dist[2] = w[2].x * w[0].y - w[0].x * w[2].y;  // 2 -0 edge
   // Test if origin is on right side of shifted edge
-  b0 = dist0 <= 0.0;
-  b1 = dist1 < 0.0;
-  b2 = dist2 <= 0.0;
+  for (int i = 0; i < 3; i++) {
+    b[i] = dist[i] <= 0.0;
+  }
   // Triangle min terms with no culling
   // triRes = ( b0 && b1 && b2 ) || (! b0 && ! b1 && ! b2 ) ;
   // Triangle min terms with backface culling
-  triRes = b0 && bl && b2;
-  return (triRes);
-  // END CODE HERE
+  isHit = b[0] && b[1] && b[2];
 
+  // END CODE HERE
   return isHit;
 }
 
