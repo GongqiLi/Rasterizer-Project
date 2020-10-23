@@ -39,8 +39,8 @@ subsample grid.
 */
 int floor_ss(int val, int r_shift, int ss_w_lg2) {
   // START CODE HERE
-  val = val >> r_shift;
-  return val;
+  val = val >> (r_shift - ss_w_lg2);
+  return (val << (r_shift - ss_w_lg2));
   // END CODE HERE
 }
 
