@@ -90,7 +90,7 @@ BoundingBox get_bounding_box(Triangle triangle, Screen screen, Config config) {
  *
  */
 bool sample_test(Triangle triangle, Sample sample) {
-  bool isHit, b[3];
+  bool isHit, b[3]; 
   int dist[3];
   Vertex2D w[3];
   // START CODE HERE
@@ -100,13 +100,16 @@ bool sample_test(Triangle triangle, Sample sample) {
     w[i].y = triangle.v[i].y - sample.y;
   }
   // Distance of  origin shifted edge
-  dist[0] = w[0].x * w[1].y - -w[1].x * w[0].y; // 0 -1 edge
+  dist[0] = w[0].x * w[1].y - w[1].x * w[0].y; // 0 -1 edge
   dist[1] = w[1].x * w[2].y - w[2].x * w[1].y;  // 1 -2 edge
   dist[2] = w[2].x * w[0].y - w[0].x * w[2].y;  // 2 -0 edge
   // Test if origin is on right side of shifted edge
-  for (int i = 0; i < 3; i++) {
-    b[i] = dist[i] <= 0.0;
-  }
+  // for (int i = 0; i < 3; i++) {
+  //   b[i] = (dist[i] <= 0.0);
+  // }
+  b[0] = dist[0] <= 0.0;
+  b[1] = dist[1] < 0.0;
+  b[2] = dist[2] <= 0.0;
   // Triangle min terms with no culling
   // triRes = ( b0 && b1 && b2 ) || (! b0 && ! b1 && ! b2 ) ;
   // Triangle min terms with backface culling
