@@ -193,7 +193,6 @@ module bbox
         bbox_sel_R10H[1][1][1] = (tri_R10S[0][1] <= tri_R10S[1][1]) & (tri_R10S[1][1] > tri_R10S[2][1]);
         bbox_sel_R10H[1][1][2] = (tri_R10S[0][1] <= tri_R10S[2][1]) & (tri_R10S[1][1] <= tri_R10S[2][1]);
 
-
         // LL X
         if (bbox_sel_R10H[0][0][0]) 
             box_R10S[0][0] = tri_R10S[0][0];
