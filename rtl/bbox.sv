@@ -172,7 +172,7 @@ module bbox
 
     // START CODE HERE
     //  DECLARE OTHER SIGNALS YOU NEED
-    logic  [1:0][1:0][2:0] bbox_sel_R10H
+    logic  [1:0][1:0][2:0] bbox_sel_R10H;
 
     // Try declaring an always_comb block to assign values to box_R10S
 
@@ -192,6 +192,7 @@ module bbox
         bbox_sel_R10H[1][1][0] = (tri_R10S[0][1] > tri_R10S[1][1]) & (tri_R10S[0][1] > tri_R10S[2][1]);
         bbox_sel_R10H[1][1][1] = (tri_R10S[0][1] <= tri_R10S[1][1]) & (tri_R10S[1][1] > tri_R10S[2][1]);
         bbox_sel_R10H[1][1][2] = (tri_R10S[0][1] <= tri_R10S[2][1]) & (tri_R10S[1][1] <= tri_R10S[2][1]);
+
 
         // LL X
         if (bbox_sel_R10H[0][0][0]) 
