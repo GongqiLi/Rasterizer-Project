@@ -172,60 +172,7 @@ module bbox
 
     // START CODE HERE
     //  DECLARE OTHER SIGNALS YOU NEED
-    logic  [1:0][1:0][2:0] bbox_sel_R10H
-
     // Try declaring an always_comb block to assign values to box_R10S
-
-    always_comb begin
-        // Bbox Selection X
-        bbox_sel_R10H[0][0][0] = (tri_R10S[0][0] <= tri_R10S[1][0]) & (tri_R10S[0][0] <= tri_R10S[2][0]);
-        bbox_sel_R10H[0][0][1] = (tri_R10S[0][0] > tri_R10S[1][0]) & (tri_R10S[1][0] <= tri_R10S[2][0]);
-        bbox_sel_R10H[0][0][2] = (tri_R10S[0][0] > tri_R10S[2][0]) & (tri_R10S[1][0] > tri_R10S[2][0]);
-        bbox_sel_R10H[1][0][0] = (tri_R10S[0][0] > tri_R10S[1][0]) & (tri_R10S[0][0] > tri_R10S[2][0]);
-        bbox_sel_R10H[1][0][1] = (tri_R10S[0][0] <= tri_R10S[1][0]) & (tri_R10S[1][0] > tri_R10S[2][0]);
-        bbox_sel_R10H[1][0][2] = (tri_R10S[0][0] <= tri_R10S[2][0]) & (tri_R10S[1][0] <= tri_R10S[2][0]);
-        
-        // Bbox Selection Y
-        bbox_sel_R10H[0][1][0] = (tri_R10S[0][1] <= tri_R10S[1][1]) & (tri_R10S[0][1] <= tri_R10S[2][1]);
-        bbox_sel_R10H[0][1][1] = (tri_R10S[0][1] > tri_R10S[1][1]) & (tri_R10S[1][1] <= tri_R10S[2][1]);
-        bbox_sel_R10H[0][1][2] = (tri_R10S[0][1] > tri_R10S[2][1]) & (tri_R10S[1][1] > tri_R10S[2][1]);
-        bbox_sel_R10H[1][1][0] = (tri_R10S[0][1] > tri_R10S[1][1]) & (tri_R10S[0][1] > tri_R10S[2][1]);
-        bbox_sel_R10H[1][1][1] = (tri_R10S[0][1] <= tri_R10S[1][1]) & (tri_R10S[1][1] > tri_R10S[2][1]);
-        bbox_sel_R10H[1][1][2] = (tri_R10S[0][1] <= tri_R10S[2][1]) & (tri_R10S[1][1] <= tri_R10S[2][1]);
-
-
-        // LL X
-        if (bbox_sel_R10H[0][0][0]) 
-            box_R10S[0][0] = tri_R10S[0][0];
-        else if (bbox_sel_R10H[0][0][1]) 
-            box_R10S[0][0] = tri_R10S[1][0];
-        else (bbox_sel_R10H[0][0][2])  
-            box_R10S[0][0] = tri_R10S[2][0];
-
-        // LL Y
-        if (bbox_sel_R10H[0][1][0]) 
-            box_R10S[0][1] = tri_R10S[0][1];
-        else if (bbox_sel_R10H[0][1][1]) 
-            box_R10S[0][1] = tri_R10S[1][1];
-        else (bbox_sel_R10H[0][1][2]) 
-            box_R10S[0][1] = tri_R10S[2][1];
-
-        // UR X
-        if (bbox_sel_R10H[1][0][0]) 
-            box_R10S[1][0] = tri_R10S[0][0];
-        else if (bbox_sel_R10H[1][0][1]) 
-            box_R10S[1][0] = tri_R10S[1][0];
-        else (bbox_sel_R10H[1][0][2]) 
-            box_R10S[1][0] = tri_R10S[2][0];
-
-        // UR Y
-        if (bbox_sel_R10H[1][1][0]) 
-            box_R10S[1][1] = tri_R10S[0][1];
-        else if (bbox_sel_R10H[1][1][1]) 
-            box_R10S[1][1] = tri_R10S[1][1];
-        else (bbox_sel_R10H[1][1][2]) 
-            box_R10S[1][1] = tri_R10S[2][1];
-    end
     // END CODE HERE
 
     // Assertions to check if box_R10S is assigned properly
@@ -234,10 +181,7 @@ module bbox
     // 2) Upper right coordinate is never less than lower left
 
     // START CODE HERE
-    assert property(@(posedge clk) box_R10S[0][0] <= box_R10S[1][0]);
-    assert property(@(posedge clk) box_R10S[0][1] <= box_R10S[1][1]);
     // END CODE HERE
-
     //Assertions to check if all cases are covered and assignments are unique
     assert property(@(posedge clk) $onehot(bbox_sel_R10H[0][0]));
     assert property(@(posedge clk) $onehot(bbox_sel_R10H[0][1]));
