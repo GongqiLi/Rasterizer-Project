@@ -278,6 +278,20 @@ for(genvar i = 0; i < 2; i = i + 1) begin
 
             //////// ASSIGN FRACTIONAL PORTION
             // START CODE HERE
+            unique case (subSample_RnnnnU)
+                4'b1000 : begin
+                    rounded_box_R10S[i][j][RADIX-1:0] = {RADIX{1'b0}};
+                end
+                4'b0100 : begin
+                    rounded_box_R10S[i][j][RADIX-1:0] = {box_R10S[i][j][RADIX-1], {RADIX-1{1'b0}}};
+                end
+                4'b0010 : begin
+                    rounded_box_R10S[i][j][RADIX-1:0] = {box_R10S[i][j][RADIX-1:RADIX-2], {RADIX-2{1'b0}}};
+                end
+                4'b0001 : begin
+                    rounded_box_R10S[i][j][RADIX-1:0] = {box_R10S[i][j][RADIX-1:RADIX-3], {RADIX-3{1'b0}}};
+                end
+            endcase
             // END CODE HERE
 
         end // always_comb
