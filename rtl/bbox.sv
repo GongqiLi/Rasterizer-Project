@@ -294,7 +294,7 @@ for(genvar i = 0; i < 2; i = i + 1) begin
             endcase
             // END CODE HERE
 
-        end // always_comb
+        end // always_comb 
 
     end
 end
@@ -321,6 +321,40 @@ endgenerate
 
         //////// ASSIGN "out_box_R10S" and "outvalid_R10H"
         // START CODE HERE
+
+        // Clipping of LL X
+        if (rounded_box_R10S[0][0] < 0) 
+            out_box_R10S[0][0] = 0;
+        else 
+            out_box_R10S[0][0] = rounded_box_R10S[0][0];
+
+        // Clipping of LL Y
+        if (rounded_box_R10S[0][1] < 0) 
+            out_box_R10S[0][1] = 0;
+        else 
+            out_box_R10S[0][1] = rounded_box_R10S[0][1];
+
+        // Clipping of UR X
+        if (rounded_box_R10S[1][0] > screen_RnnnnS[0]) 
+            out_box_R10S[1][0] = screen_RnnnnS[0];
+        else 
+            out_box_R10S[1][0] = rounded_box_R10S[1][0];
+
+        // Clipping of UR Y
+        if (rounded_box_R10S[1][1] > screen_RnnnnS[1]) 
+            out_box_R10S[1][1] = screen_RnnnnS[1];
+        else 
+            out_box_R10S[1][1] = rounded_box_R10S[1][1];
+
+        // Rejection Test
+        if ((out_box_R10S[0][0] < 0) || (out_box_R10S[0][1] < 0)) 
+            outvalid_R10H = 1'b0;
+        else if ((out_box_R10S[1][0] > screen_RnnnnS[0]) || (out_box_R10S[1][1] > screen_RnnnnS[1])) 
+            outvalid_R10H = 1'b0;
+        else if (!validTri_R10H) 
+            outvalid_R10H = 1'b0;
+        else 
+            outvalid_R10H = 1'b1;
         // END CODE HERE
 
     end
