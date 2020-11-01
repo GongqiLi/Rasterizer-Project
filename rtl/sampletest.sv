@@ -138,7 +138,7 @@ module sampletest
         dist_lg_R16S[2] = edge_R16S[1][1][0] * edge_R16S[0][0][1] - edge_R16S[0][0][0] * edge_R16S[1][1][1];
 
         // (4) Check distance and assign hit_valid_R16H.
-        hit_valid_R16H = (dist_lg_R16S[0] <= 0) && (dist_lg_R16S[1] < 0) && (dist_lg_R16S[2] <= 0);
+        hit_valid_R16H = (dist_lg_R16S[0] <= 0) & (dist_lg_R16S[1] < 0) & (dist_lg_R16S[2] <= 0);
     end
     // END CODE HERE
 

@@ -256,45 +256,37 @@ if(MOD_FSM == 0) begin // Using baseline FSM
             4'b1000 : begin
                 // Keep X while adding Y by 1'b1
                 next_up_samp_R14S[0] = box_R14S[0][0];
-                next_up_samp_R14S[1][SIGFIG-1:RADIX] = sample_R14S[1][SIGFIG-1:RADIX] + 1'b1;
-                next_up_samp_R14S[1][RADIX-1:0] = sample_R14S[1][RADIX-1:0];
+                next_up_samp_R14S[1] = {sample_R14S[1][SIGFIG-1:RADIX] + 1'b1, sample_R14S[1][RADIX-1:0]};
 
                 // Keep Y while adding X by 1'b1
-                next_rt_samp_R14S[0][SIGFIG-1:RADIX] = sample_R14S[0][SIGFIG-1:RADIX] + 1'b1;
-                next_rt_samp_R14S[0][RADIX-1:0] = sample_R14S[0][RADIX-1:0];
+                next_rt_samp_R14S[0] = {sample_R14S[0][SIGFIG-1:RADIX] + 1'b1, sample_R14S[0][RADIX-1:0]};
                 next_rt_samp_R14S[1] = sample_R14S[1];
             end
            4'b0100 : begin
                 // Keep X while adding Y by 1'b1
                 next_up_samp_R14S[0] = box_R14S[0][0];
-                next_up_samp_R14S[1][SIGFIG-1:RADIX-1] = sample_R14S[1][SIGFIG-1:RADIX-1] + 1'b1;
-                next_up_samp_R14S[1][RADIX-2:0] = sample_R14S[1][RADIX-2:0];
+                next_up_samp_R14S[1] = {sample_R14S[1][SIGFIG-1:RADIX-1] + 1'b1, sample_R14S[1][RADIX-2:0]};
 
                 // Keep Y while adding X by 1'b1
-                next_rt_samp_R14S[0][SIGFIG-1:RADIX-1] = sample_R14S[0][SIGFIG-1:RADIX-1] + 1'b1;
-                next_rt_samp_R14S[0][RADIX-2:0] = sample_R14S[0][RADIX-2:0];
+                next_rt_samp_R14S[0] = {sample_R14S[0][SIGFIG-1:RADIX-1] + 1'b1, sample_R14S[0][RADIX-2:0]};
                 next_rt_samp_R14S[1] = sample_R14S[1];
             end
             4'b0010 : begin
                 // Keep X while adding Y by 1'b1
                 next_up_samp_R14S[0] = box_R14S[0][0];
-                next_up_samp_R14S[1][SIGFIG-1:RADIX-2] = sample_R14S[1][SIGFIG-1:RADIX-2] + 1'b1;
-                next_up_samp_R14S[1][RADIX-3:0] = sample_R14S[1][RADIX-3:0];
+                next_up_samp_R14S[1] = {sample_R14S[1][SIGFIG-1:RADIX-2] + 1'b1, sample_R14S[1][RADIX-3:0]};
 
                 // Keep Y while adding X by 1'b1
-                next_rt_samp_R14S[0][SIGFIG-1:RADIX-2] = sample_R14S[0][SIGFIG-1:RADIX-2] + 1'b1;
-                next_rt_samp_R14S[0][RADIX-3:0] = sample_R14S[0][RADIX-3:0];
+                next_rt_samp_R14S[0] = {sample_R14S[0][SIGFIG-1:RADIX-2] + 1'b1, sample_R14S[0][RADIX-3:0]};
                 next_rt_samp_R14S[1] = sample_R14S[1];
             end
             4'b0001 : begin
                 // Keep X while adding Y by 1'b1
                 next_up_samp_R14S[0] = box_R14S[0][0];
-                next_up_samp_R14S[1][SIGFIG-1:RADIX-3] = sample_R14S[1][SIGFIG-1:RADIX-3] + 1'b1;
-                next_up_samp_R14S[1][RADIX-4:0] = sample_R14S[1][RADIX-4:0];
+                next_up_samp_R14S[1] = {sample_R14S[1][SIGFIG-1:RADIX-3] + 1'b1, sample_R14S[1][RADIX-4:0]};
 
                 // Keep Y while adding X by 1'b1
-                next_rt_samp_R14S[0][SIGFIG-1:RADIX-3] = sample_R14S[0][SIGFIG-1:RADIX-3] + 1'b1;
-                next_rt_samp_R14S[0][RADIX-4:0] = sample_R14S[0][RADIX-4:0];
+                next_rt_samp_R14S[0] = {sample_R14S[0][SIGFIG-1:RADIX-3] + 1'b1, sample_R14S[0][RADIX-4:0]};
                 next_rt_samp_R14S[1] = sample_R14S[1];
             end
         endcase
@@ -312,7 +304,7 @@ if(MOD_FSM == 0) begin // Using baseline FSM
             at_top_edg_R14H = 1'b0;
 
         // Up Right Corner Judgement
-        if (sample_R14S == box_R14S[1]) 
+        if (at_right_edg_R14H & at_top_edg_R14H) 
             at_end_box_R14H = 1'b1;
         else 
             at_end_box_R14H = 1'b0;
