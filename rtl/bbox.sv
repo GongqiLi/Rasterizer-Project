@@ -227,6 +227,8 @@ module bbox
             box_R10S[1][1] = tri_R10S[2][1];
 
         // Displaying Output for Debugging
+        $display("Test 1: Determining a Bounding Box")
+
         $display("tri_R10S[0][0] ========= %d", tri_R10S[0][0]);
         $display("tri_R10S[1][0] ========= %d", tri_R10S[1][0]);
         $display("tri_R10S[2][0] ========= %d", tri_R10S[2][0]);
@@ -305,6 +307,12 @@ for(genvar i = 0; i < 2; i = i + 1) begin
                     rounded_box_R10S[i][j][RADIX-1:0] = {box_R10S[i][j][RADIX-1:RADIX-3], {RADIX-3{1'b0}}};
                 end
             endcase
+
+            $display("Test 2: Round Values to Supsample Interval")
+            $display("supSample_RnnnnU ========= %b", supSample_RnnnnU);
+            $display("box_R10S[i][j] ========= %b", box_R10S[i][j]);
+            $display("rounded_box_R10S[i][j] ========= %b", rounded_box_R10S[i][j]);
+
             // END CODE HERE
 
         end // always_comb 
