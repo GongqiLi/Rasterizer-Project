@@ -197,33 +197,33 @@ module bbox
         // LL X
         if (bbox_sel_R10H[0][0][0]) 
             box_R10S[0][0] = tri_R10S[0][0];
-        else if (bbox_sel_R10H[0][0][1]) 
+        if (bbox_sel_R10H[0][0][1]) 
             box_R10S[0][0] = tri_R10S[1][0];
-        else (bbox_sel_R10H[0][0][2])  
+        if (bbox_sel_R10H[0][0][2])  
             box_R10S[0][0] = tri_R10S[2][0];
 
         // LL Y
         if (bbox_sel_R10H[0][1][0]) 
             box_R10S[0][1] = tri_R10S[0][1];
-        else if (bbox_sel_R10H[0][1][1]) 
+        if (bbox_sel_R10H[0][1][1]) 
             box_R10S[0][1] = tri_R10S[1][1];
-        else (bbox_sel_R10H[0][1][2]) 
+        if (bbox_sel_R10H[0][1][2]) 
             box_R10S[0][1] = tri_R10S[2][1];
 
         // UR X
         if (bbox_sel_R10H[1][0][0]) 
             box_R10S[1][0] = tri_R10S[0][0];
-        else if (bbox_sel_R10H[1][0][1]) 
+        if (bbox_sel_R10H[1][0][1]) 
             box_R10S[1][0] = tri_R10S[1][0];
-        else (bbox_sel_R10H[1][0][2]) 
+        if (bbox_sel_R10H[1][0][2]) 
             box_R10S[1][0] = tri_R10S[2][0];
 
         // UR Y
         if (bbox_sel_R10H[1][1][0]) 
             box_R10S[1][1] = tri_R10S[0][1];
-        else if (bbox_sel_R10H[1][1][1]) 
+        if (bbox_sel_R10H[1][1][1]) 
             box_R10S[1][1] = tri_R10S[1][1];
-        else (bbox_sel_R10H[1][1][2]) 
+        if (bbox_sel_R10H[1][1][2]) 
             box_R10S[1][1] = tri_R10S[2][1];
     end
     // END CODE HERE
