@@ -330,6 +330,46 @@ if(MOD_FSM == 0) begin // Using baseline FSM
     always_comb begin
         // START CODE HERE
         // Try using a case statement on state_R14H
+        case (state_R14H)
+            WAIT_STATE : begin
+                // Pass through tri_R14S, box_R14S, color_R14U
+                next_box_R14S = box_R13S;
+                next_tri_R14S = tri_R13S;
+                next_color_R14U = color_R13U;
+
+                // Update sample_R14S, validSamp_R14H, halt_RnnnnL, state_R14H
+                next_sample_R14S = box_R13S[0];
+                next_validSamp_R14H = 1'b0;
+                next_halt_RnnnnL = 1'b1;
+                next_state_R14H = WAIT_STATE;
+            end
+            TEST_STATE : begin
+                // Pass through tri_R14S, box_R14S, color_R14U
+                next_box_R14S = box_R14S;
+                next_tri_R14S = tri_R14S;
+                next_color_R14U = color_R14U;
+
+                // Update sample_R14S, validSamp_R14H, halt_RnnnnL, state_R14H
+                if (!at_end_box_R14H && !at_right_edg_R14H) begin
+                    next_sample_R14S = next_rt_samp_R14S;     
+                    next_validSamp_R14H = 1'b1;
+                    next_halt_RnnnnL = 1'b0;
+                    next_state_R14H = TEST_STATE;
+                end
+                else if (!at_end_box_R14H && at_right_edg_R14H) begin
+                    next_sample_R14S = next_up_samp_R14S;     
+                    next_validSamp_R14H = 1'b1;
+                    next_halt_RnnnnL = 1'b0;
+                    next_state_R14H = TEST_STATE;
+                end
+                else begin
+                    next_sample_R14S = box_R14S[0];     
+                    next_validSamp_R14H = 1'b0;
+                    next_halt_RnnnnL = 1'b1;
+                    next_state_R14H = WAIT_STATE;
+                end
+            end
+        endcase
         // END CODE HERE
     end // always_comb
 
