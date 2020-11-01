@@ -151,7 +151,7 @@ module testbench
         .tri_R13S           (top_rast.rast.tri_R13S             ), // Input: 4 Sets X,Y Fixed Point Values
         .box_R13S           (top_rast.rast.box_R13S             ), // Input: Bound Box
         .validTri_R13H      (top_rast.rast.validTri_R13H        ), // Input: Valid Data for Operation
-        .invalidate_R10H    (top_rast.rast.bbox.invalidate_R10H ),
+        // .invalidate_R10H    (top_rast.rast.bbox.invalidate_R10H ),
 
         .clk                (clk                                ), // Input: Clock
         .rst                (rst                                ), // Input: Reset
