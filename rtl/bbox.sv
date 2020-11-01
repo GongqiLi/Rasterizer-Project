@@ -376,6 +376,11 @@ endgenerate
             outvalid_R10H = 1'b0;
         else 
             outvalid_R10H = 1'b1;
+
+        $display("Test 3: Clipping or Rejection")
+        $display("out_box_R10S ========= %b, %b, %b, %b", out_box_R10S[0][0], out_box_R10S[0][1], out_box_R10S[1][0], out_box_R10S[1][1])       
+        $display("outvalid_R10H ========= %b", outvalid_R10H);
+
         // END CODE HERE
 
     end
