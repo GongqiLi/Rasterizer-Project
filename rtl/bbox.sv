@@ -227,7 +227,7 @@ module bbox
             box_R10S[1][1] = tri_R10S[2][1];
 
         // Displaying Output for Debugging
-        $display("Test 1: Determining a Bounding Box")
+        $display("Test 1: Determining a Bounding Box");
 
         $display("tri_R10S[0][0] ========= %d", tri_R10S[0][0]);
         $display("tri_R10S[1][0] ========= %d", tri_R10S[1][0]);
@@ -308,7 +308,7 @@ for(genvar i = 0; i < 2; i = i + 1) begin
                 end
             endcase
 
-            $display("Test 2: Round Values to Supsample Interval")
+            $display("Test 2: Round Values to Supsample Interval");
             $display("supSample_RnnnnU ========= %b", supSample_RnnnnU);
             $display("box_R10S[i][j] ========= %b", box_R10S[i][j]);
             $display("rounded_box_R10S[i][j] ========= %b", rounded_box_R10S[i][j]);
@@ -377,8 +377,8 @@ endgenerate
         else 
             outvalid_R10H = 1'b1;
 
-        $display("Test 3: Clipping or Rejection")
-        $display("out_box_R10S ========= %b, %b, %b, %b", out_box_R10S[0][0], out_box_R10S[0][1], out_box_R10S[1][0], out_box_R10S[1][1])       
+        $display("Test 3: Clipping or Rejection");
+        $display("out_box_R10S ========= %b, %b, %b, %b", out_box_R10S[0][0], out_box_R10S[0][1], out_box_R10S[1][0], out_box_R10S[1][1]);       
         $display("outvalid_R10H ========= %b", outvalid_R10H);
 
         // END CODE HERE
