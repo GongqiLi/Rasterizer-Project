@@ -131,11 +131,11 @@ module sampletest
 
         // Calculate distance x_1 * y_2 - x_2 * y_1
         // Edge 0
-        dist_lg_R16S[0] = edge_R16S[0][0][0] * edge_R16S[0][1][1] - edge_R16S[0][1][0] * edge_R16S[0][0][1];
+        dist_lg_R16S[0] = edge_R16S[0][0][0][12:0] * edge_R16S[0][1][1][12:0] - edge_R16S[0][1][0][12:0] * edge_R16S[0][0][1][12:0];
         // Edge 1
-        dist_lg_R16S[1] = edge_R16S[0][1][0] * edge_R16S[1][1][1] - edge_R16S[1][1][0] * edge_R16S[0][1][1];
+        dist_lg_R16S[1] = edge_R16S[0][1][0][12:0] * edge_R16S[1][1][1][12:0] - edge_R16S[1][1][0][12:0] * edge_R16S[0][1][1][12:0];
         // Edge 2
-        dist_lg_R16S[2] = edge_R16S[1][1][0] * edge_R16S[0][0][1] - edge_R16S[0][0][0] * edge_R16S[1][1][1];
+        dist_lg_R16S[2] = edge_R16S[1][1][0][12:0] * edge_R16S[0][0][1][12:0] - edge_R16S[0][0][0][12:0] * edge_R16S[1][1][1][12:0];
 
         // (4) Check distance and assign hit_valid_R16H.
         hit_valid_R16H = (dist_lg_R16S[0] <= 0) & (dist_lg_R16S[1] < 0) & (dist_lg_R16S[2] <= 0);
