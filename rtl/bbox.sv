@@ -396,11 +396,13 @@ endgenerate
     assert property( @(posedge clk) (outvalid_R10H |-> out_box_R10S[1][1] <= screen_RnnnnS[1] ));
 
     // ***************** End of Step 3 *********************
+    logic is_halted;
     logic clk_gated;
-   
+    
 
     always_comb begin
-        clk_gated = clk && halt_RnnnnL;
+        clk_gated = clk && is_halted;
+        is_halted = halt_RnnnnL
     end
 
     dff3 #(
