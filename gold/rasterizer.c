@@ -77,6 +77,10 @@ BoundingBox get_bounding_box(Triangle triangle, Screen screen, Config config) {
       bbox.upper_right.y > screen.height ? screen.height : bbox.upper_right.y;
   bbox.lower_left.x = bbox.lower_left.x < 0 ? 0 : bbox.lower_left.x;
   bbox.lower_left.y = bbox.lower_left.y < 0 ? 0 : bbox.lower_left.y;
+
+  if ((triangle.v[1].x - triangle.v[0].x)*(triangle.v[2].y - triangle.v[1].y) - (triangle.v[2].x - triangle.v[1].x)*(triangle.v[1].y - triangle.v[0].y) > 0) {
+    bbox.valid = 0;
+  }
   bbox.valid = true;
 
   // END CODE HERE
