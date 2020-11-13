@@ -89,7 +89,7 @@ module test_iterator
     parameter AXIS = 3, // Number of axis foreach vertex 3 is (x,y,z).
     parameter COLORS = 3, // Number of color channels
     parameter PIPE_DEPTH = 1, // How many pipe stages are in this block
-    parameter MOD_FSM = 0 // Use Modified FSM to eliminate a wait state
+    parameter MOD_FSM = 1 // Use Modified FSM to eliminate a wait state
 )
 (
     //Input Signals
@@ -427,7 +427,160 @@ else begin // Use modified FSM
     //////  RTL code for modified FSM Goes Here
     //////
 
-    ////// PLACE YOUR CODE HERE
+    // To build this FSM we want to have two more state: one is the working
+    // status of this FSM, and the other is the current bounding box where
+    // we iterate sample points
+
+    // define two more states, box_R14S and state_R14H
+    logic signed [SIGFIG-1:0]   box_R14S[1:0][1:0];    		// the state for current bounding box
+    logic signed [SIGFIG-1:0]   next_box_R14S[1:0][1:0];
+
+    state_t                     state_R14H;     //State Designation (Waiting or Testing)
+    state_t                     next_state_R14H;        //Next Cycles State
+
+    dff3 #(
+        .WIDTH(SIGFIG),
+        .ARRAY_SIZE1(2),
+        .ARRAY_SIZE2(2),
+        .PIPE_DEPTH(1),
+        .RETIME_STATUS(0)
+    )
+    d305
+    (
+        .clk    (clk            ),
+        .reset  (rst            ),
+        .en     (1'b1           ),
+        .in     (next_box_R14S  ),
+        .out    (box_R14S       )
+    );
+
+    always_ff @(posedge clk, posedge rst) begin
+        if(rst) begin
+            state_R14H <= WAIT_STATE;
+        end
+        else begin
+            state_R14H <= next_state_R14H;
+        end
+    end
+
+    // define some helper signals
+    logic signed [SIGFIG-1:0]   next_up_samp_R14S[1:0]; //If jump up, next sample
+    logic signed [SIGFIG-1:0]   next_rt_samp_R14S[1:0]; //If jump right, next sample
+    logic                       at_right_edg_R14H;      //Current sample at right edge of bbox?
+    logic                       at_top_edg_R14H;        //Current sample at top edge of bbox?
+    logic                       at_end_box_R14H;        //Current sample at end of bbox?
+
+    always_comb begin
+        // START CODE HERE
+        unique case (subSample_RnnnnU)
+            4'b1000 : begin
+                // Keep X while adding Y by 1'b1
+                next_up_samp_R14S[0] = box_R14S[0][0];
+                next_up_samp_R14S[1] = {sample_R14S[1][SIGFIG-1:RADIX] + 1'b1, sample_R14S[1][RADIX-1:0]};
+
+                // Keep Y while adding X by 1'b1
+                next_rt_samp_R14S[0] = {sample_R14S[0][SIGFIG-1:RADIX] + 1'b1, sample_R14S[0][RADIX-1:0]};
+                next_rt_samp_R14S[1] = sample_R14S[1];
+            end
+           4'b0100 : begin
+                // Keep X while adding Y by 1'b1
+                next_up_samp_R14S[0] = box_R14S[0][0];
+                next_up_samp_R14S[1] = {sample_R14S[1][SIGFIG-1:RADIX-1] + 1'b1, sample_R14S[1][RADIX-2:0]};
+
+                // Keep Y while adding X by 1'b1
+                next_rt_samp_R14S[0] = {sample_R14S[0][SIGFIG-1:RADIX-1] + 1'b1, sample_R14S[0][RADIX-2:0]};
+                next_rt_samp_R14S[1] = sample_R14S[1];
+            end
+            4'b0010 : begin
+                // Keep X while adding Y by 1'b1
+                next_up_samp_R14S[0] = box_R14S[0][0];
+                next_up_samp_R14S[1] = {sample_R14S[1][SIGFIG-1:RADIX-2] + 1'b1, sample_R14S[1][RADIX-3:0]};
+
+                // Keep Y while adding X by 1'b1
+                next_rt_samp_R14S[0] = {sample_R14S[0][SIGFIG-1:RADIX-2] + 1'b1, sample_R14S[0][RADIX-3:0]};
+                next_rt_samp_R14S[1] = sample_R14S[1];
+            end
+            4'b0001 : begin
+                // Keep X while adding Y by 1'b1
+                next_up_samp_R14S[0] = box_R14S[0][0];
+                next_up_samp_R14S[1] = {sample_R14S[1][SIGFIG-1:RADIX-3] + 1'b1, sample_R14S[1][RADIX-4:0]};
+
+                // Keep Y while adding X by 1'b1
+                next_rt_samp_R14S[0] = {sample_R14S[0][SIGFIG-1:RADIX-3] + 1'b1, sample_R14S[0][RADIX-4:0]};
+                next_rt_samp_R14S[1] = sample_R14S[1];
+            end
+        endcase
+
+        // Right Edge Judgement
+        if (sample_R14S[0] == box_R14S[1][0]) 
+            at_right_edg_R14H = 1'b1;
+        else 
+            at_right_edg_R14H = 1'b0;
+
+        // Top Edge Judgement
+        if (sample_R14S[1] == box_R14S[1][1]) 
+            at_top_edg_R14H = 1'b1;
+        else 
+            at_top_edg_R14H = 1'b0;
+
+        // Up Right Corner Judgement
+        if (at_right_edg_R14H & at_top_edg_R14H) 
+            at_end_box_R14H = 1'b1;
+        else 
+            at_end_box_R14H = 1'b0;
+        // END CODE HERE
+    end
+
+    // Combinational logic for state transitions
+    always_comb begin
+        // START CODE HERE
+        // Try using a case statement on state_R14H
+        case (state_R14H)
+            WAIT_STATE : begin
+                // Updating rules for the wait state
+                next_tri_R14S = tri_R13S;
+                next_color_R14U = color_R13U;
+                next_sample_R14S = box_R13S[0];
+                next_state_R14H = (validTri_R13H ? TEST_STATE : WAIT_STATE);
+                next_validSamp_R14H = (validTri_R13H ? 1'b1 : 1'b0);
+                halt_RnnnnL = 1'b1;
+                next_box_R14S = box_R13S;
+            end
+            TEST_STATE : begin
+                // Updating rules when the sample is not at the end of the bounding box
+                if (!at_end_box_R14H && !at_right_edg_R14H) begin
+                    next_box_R14S = box_R14S;
+                    next_tri_R14S = tri_R14S;
+                    next_color_R14U = color_R14U;
+                    next_sample_R14S = next_rt_samp_R14S;     
+                    next_validSamp_R14H = 1'b1;
+                    halt_RnnnnL = (validTri_R13H ? 1'b0 : 1'b1);
+                    next_state_R14H = TEST_STATE;
+                end
+                else if (!at_end_box_R14H && at_right_edg_R14H) begin
+                    next_box_R14S = box_R14S;
+                    next_tri_R14S = tri_R14S;
+                    next_color_R14U = color_R14U;
+                    next_sample_R14S = next_up_samp_R14S;     
+                    next_validSamp_R14H = 1'b1;
+                    halt_RnnnnL = (validTri_R13H ? 1'b0 : 1'b1);
+                    next_state_R14H = TEST_STATE;
+                end
+                // Updating rules when the sample is at the end of the bounding box
+                else begin
+                    halt_RnnnnL = 1'b1;
+                    next_tri_R14S = tri_R13S;
+                    next_sample_R14S = box_R13S[0];
+                    next_state_R14H = (validTri_R13H ? TEST_STATE : WAIT_STATE);
+                    next_validSamp_R14H = (validTri_R13H ? 1'b1 : 1'b0);
+                    next_box_R14S = box_R13S;
+                    next_color_R14U = color_R13U;
+
+                end
+            end
+        endcase
+        // END CODE HERE
+    end // always_comb
 
     //////
     //////  RTL code for modified FSM Finishes
