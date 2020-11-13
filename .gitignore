@@ -40,3 +40,4 @@ parsetab.py
 formal/rast.sv
 rasterizer_gold
 output.txt
+rtl/test_iterator.sv

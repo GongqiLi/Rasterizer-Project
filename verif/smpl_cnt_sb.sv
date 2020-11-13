@@ -146,6 +146,7 @@ module smpl_cnt_sb
     always @( posedge clk ) begin
         #10;
         if( reset_to_zero && validSamp_RnnH ) begin
+            /*
             if(one != check_hit_count(
                     int'(tri_RnnS[0][0]),   //triangle
                     int'(tri_RnnS[0][1]),   //triangle
@@ -163,6 +164,7 @@ module smpl_cnt_sb
 
                 $finish();
             end
+            */
         end
     end
 
