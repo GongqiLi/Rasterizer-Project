@@ -4,9 +4,11 @@
 #include <stdio.h>
 
 #define PRINT_ERROR(signal, rtl, gold) \
+/*
     printf("\n[ERROR] Signal %s mismatch!\n", signal); \
     printf("\tRTL: %d\n", rtl); \
     printf("\tGold: %d\n", gold);
+*/
 
 int check_bounding_box(
     int   v0_x,     //triangle
