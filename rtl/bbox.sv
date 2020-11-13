@@ -172,17 +172,10 @@ module bbox
 
     // START CODE HERE
     //  DECLARE OTHER SIGNALS YOU NEED
-    logic halt;
 
     logic  [1:0][1:0][2:0] bbox_sel_R10H;
     
-    logic clk_gated;
-   
-
-    always_comb begin
-        clk_gated = clk && halt;
-        halt = halt_RnnnnL;
-    end
+  
     // Try declaring an always_comb block to assign values to box_R10S
 
     always_comb begin
@@ -403,6 +396,12 @@ endgenerate
     assert property( @(posedge clk) (outvalid_R10H |-> out_box_R10S[1][1] <= screen_RnnnnS[1] ));
 
     // ***************** End of Step 3 *********************
+    logic clk_gated;
+   
+
+    always_comb begin
+        clk_gated = clk && halt_RnnnnL;
+    end
 
     dff3 #(
         .WIDTH(SIGFIG),
