@@ -125,7 +125,7 @@ module test_iterator
     logic unsigned  [SIGFIG-1:0]    next_color_R14U[COLORS-1:0] ;
     logic signed [SIGFIG-1:0]       next_sample_R14S[1:0];
     logic                               next_validSamp_R14H;
-    logic                               next_halt_RnnnnL;
+    //logic                               next_halt_RnnnnL;
 
     // Instantiate registers for storing these states
     dff3 #(
@@ -179,6 +179,8 @@ module test_iterator
         .PIPE_DEPTH(1),
         .RETIME_STATUS(0) // No retime
     )
+
+    /*
     d304
     (
         .clk    (clk                                    ),
@@ -187,6 +189,16 @@ module test_iterator
         .in     ({next_validSamp_R14H, next_halt_RnnnnL}),
         .out    ({validSamp_R14H, halt_RnnnnL}          )
     );
+    */
+    d304
+    (
+        .clk    (clk                                    ),
+        .reset  (rst                                    ),
+        .en     (1'b1                                   ),
+        .in     (next_validSamp_R14H),
+        .out    (validSamp_R14H          )
+    );
+
     // Instantiate registers for storing these states
 
     typedef enum logic {
@@ -332,7 +344,8 @@ if(MOD_FSM == 0) begin // Using baseline FSM
                 // A validTri_R14H signal causes a transition from WAIT state to TEST state
                 next_state_R14H = (validTri_R13H ? TEST_STATE : WAIT_STATE);
                 next_validSamp_R14H = (validTri_R13H ? 1'b1 : 1'b0);
-                next_halt_RnnnnL = (validTri_R13H ? 1'b0 : 1'b1);
+                halt_RnnnnL = 1'b1;
+                //next_halt_RnnnnL = (validTri_R13H ? 1'b0 : 1'b1);
                 next_box_R14S = box_R13S;
             end
             TEST_STATE : begin
@@ -345,20 +358,23 @@ if(MOD_FSM == 0) begin // Using baseline FSM
                 if (!at_end_box_R14H && !at_right_edg_R14H) begin
                     next_sample_R14S = next_rt_samp_R14S;     
                     next_validSamp_R14H = 1'b1;
-                    next_halt_RnnnnL = 1'b0;
+                    halt_RnnnnL = (validTri_R13H ? 1'b0 : 1'b1);
+                    //next_halt_RnnnnL = 1'b0;
                     next_state_R14H = TEST_STATE;
                 end
                 else if (!at_end_box_R14H && at_right_edg_R14H) begin
                     next_sample_R14S = next_up_samp_R14S;     
                     next_validSamp_R14H = 1'b1;
-                    next_halt_RnnnnL = 1'b0;
+                    halt_RnnnnL = (validTri_R13H ? 1'b0 : 1'b1);
+                    //next_halt_RnnnnL = 1'b0;
                     next_state_R14H = TEST_STATE;
                 end
                 else begin
                     // An end_box_R14H signal causes a transition from TEST state to WAIT state
                     next_sample_R14S = box_R14S[0];     
                     next_validSamp_R14H = 1'b0;
-                    next_halt_RnnnnL = 1'b1;
+                    halt_RnnnnL = (validTri_R13H ? 1'b0 : 1'b1);
+                    //next_halt_RnnnnL = 1'b1;
                     next_state_R14H = WAIT_STATE;
                 end
             end

@@ -234,7 +234,7 @@ module testbench
     )
     perf_mon
     (
-        .tri_R16S       (top_rast.rast.tri_R16S       ), // 4 Sets X,Y Fixed Point Values
+        .tri_R10S       (top_rast.rast.tri_R10S       ), // 4 Sets X,Y Fixed Point Values
         .color_R16U     (top_rast.rast.color_R16U     ), // triangle Color
         .validSamp_R16H (top_rast.rast.validSamp_R16H ),
         .sample_R16S    (top_rast.rast.sample_R16S    ), // Will change for JIT -todo
