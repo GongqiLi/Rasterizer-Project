@@ -146,6 +146,12 @@ module sampletest
         // // Edge 2
         dist_lg_R16S[2] =  lower_edge_R16S[1][1][0] *  lower_edge_R16S[0][0][1] - lower_edge_R16S[0][0][0] * lower_edge_R16S[1][1][1];
 
+        // dist_lg_R16S[0] =  edge_R16S[0][0][0] *  edge_R16S[0][1][1] -  edge_R16S[0][1][0] * edge_R16S[0][0][1];
+        // // // Edge 1
+        // dist_lg_R16S[1] =  edge_R16S[0][1][0] *  edge_R16S[1][1][1] - edge_R16S[1][1][0] * edge_R16S[0][1][1];
+        // // // Edge 2
+        // dist_lg_R16S[2] =  edge_R16S[1][1][0] *  edge_R16S[0][0][1] - edge_R16S[0][0][0] * edge_R16S[1][1][1];
+
         // (4) Check distance and assign hit_valid_R16H.
         hit_valid_R16H = (dist_lg_R16S[0] <= 0) & (dist_lg_R16S[1] < 0) & (dist_lg_R16S[2] <= 0);
     end
