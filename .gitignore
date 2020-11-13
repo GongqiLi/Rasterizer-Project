@@ -19,6 +19,7 @@ genesis_clean.cmd
 csrc
 vc_hdrs.h
 DVEfiles
+test.sh
 assignment2
 libmng.so.1
 libtermcap.so.2
@@ -38,3 +39,4 @@ parsetab.py
 .magma
 formal/rast.sv
 rasterizer_gold
+output.txt
