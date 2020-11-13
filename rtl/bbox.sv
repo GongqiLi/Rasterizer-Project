@@ -172,8 +172,17 @@ module bbox
 
     // START CODE HERE
     //  DECLARE OTHER SIGNALS YOU NEED
-    logic  [1:0][1:0][2:0] bbox_sel_R10H;
+    logic halt;
 
+    logic  [1:0][1:0][2:0] bbox_sel_R10H;
+    
+    logic clk_gated;
+   
+
+    always_comb begin
+        clk_gated = clk && halt;
+        halt = halt_RnnnnL;
+    end
     // Try declaring an always_comb block to assign values to box_R10S
 
     always_comb begin
@@ -404,7 +413,7 @@ endgenerate
     )
     d_bbx_r1
     (
-        .clk    (clk                ),
+        .clk    (clk_gated          ),
         .reset  (rst                ),
         .en     (halt_RnnnnL        ),
         .in     (tri_R10S          ),
@@ -419,7 +428,7 @@ endgenerate
     )
     d_bbx_r2
     (
-        .clk    (clk                ),
+        .clk    (clk        ),
         .reset  (rst                ),
         .en     (halt_RnnnnL        ),
         .in     (color_R10U         ),
@@ -435,7 +444,7 @@ endgenerate
     )
     d_bbx_r3
     (
-        .clk    (clk            ),
+        .clk    (clk_gated    ),
         .reset  (rst            ),
         .en     (halt_RnnnnL    ),
         .in     (out_box_R10S   ),
@@ -449,7 +458,7 @@ endgenerate
     )
     d_bbx_r4
     (
-        .clk    (clk                    ),
+        .clk    (clk            ),
         .reset  (rst                    ),
         .en     (halt_RnnnnL            ),
         .in     (outvalid_R10H          ),
@@ -467,7 +476,7 @@ endgenerate
     )
     d_bbx_f1
     (
-        .clk    (clk                ),
+        .clk    (clk_gated          ),
         .reset  (rst                ),
         .en     (halt_RnnnnL        ),
         .in     (tri_R13S_retime    ),
@@ -482,7 +491,7 @@ endgenerate
     )
     d_bbx_f2
     (
-        .clk    (clk                ),
+        .clk    (clk          ),
         .reset  (rst                ),
         .en     (halt_RnnnnL        ),
         .in     (color_R13U_retime  ),
@@ -498,7 +507,7 @@ endgenerate
     )
     d_bbx_f3
     (
-        .clk    (clk            ),
+        .clk    (clk_gated      ),
         .reset  (rst            ),
         .en     (halt_RnnnnL    ),
         .in     (box_R13S_retime),
@@ -512,7 +521,7 @@ endgenerate
     )
     d_bbx_f4
     (
-        .clk    (clk                    ),
+        .clk    (clk              ),
         .reset  (rst                    ),
         .en     (halt_RnnnnL            ),
         .in     (validTri_R13H_retime   ),
