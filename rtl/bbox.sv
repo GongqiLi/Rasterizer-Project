@@ -418,7 +418,7 @@ endgenerate
 
     always_comb begin
         clk_gated = clk && is_halted;
-        is_halted = halt_RnnnnL
+        is_halted = halt_RnnnnL;
     end
 
     dff3 #(
