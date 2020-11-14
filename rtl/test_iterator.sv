@@ -175,7 +175,7 @@ module test_iterator
     );
 
     dff #(
-        .WIDTH(2),
+        .WIDTH(1),
         .PIPE_DEPTH(1),
         .RETIME_STATUS(0) // No retime
     )
