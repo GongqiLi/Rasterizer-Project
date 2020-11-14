@@ -346,10 +346,10 @@ endgenerate
     logic signed [SIGFIG-1:0] y10;
     logic signed [SIGFIG-1:0] y11;
 
-    logic signed [SIGFIG-12:0] x00;
-    logic signed [SIGFIG-12:0] x01;
-    logic signed [SIGFIG-12:0] x10;
-    logic signed [SIGFIG-12:0] x11;
+    // logic signed [SIGFIG-12:0] x00;
+    // logic signed [SIGFIG-12:0] x01;
+    // logic signed [SIGFIG-12:0] x10;
+    // logic signed [SIGFIG-12:0] x11;
     
     always_comb begin
     
@@ -358,10 +358,10 @@ endgenerate
     y10 = (tri_R10S[2][0] - tri_R10S[1][0]);
     y11 = (tri_R10S[1][1] - tri_R10S[0][1]);
     
-    x00 = y00[12:0];
-    x01 = y01[12:0];
-    x11 = y11[12:0];
-    x10 = y10[12:0];
+    // x00 = y00[12:0];
+    // x01 = y01[12:0];
+    // x11 = y11[12:0];
+    // x10 = y10[12:0];
    
     end
     always_comb begin
@@ -409,11 +409,11 @@ endgenerate
         // Rejection Test Backface culling
         if ((out_box_R10S[1][0] < 0) || (out_box_R10S[1][1] < 0)) 
             outvalid_R10H = 1'b0;
-        else if ((out_box_R10S[0][0] > screen_RnnnnS[0]) || (out_box_R10S[0][1] > screen_RnnnnS[1])) 
+        else if ((out_box_R10S[0][0] >  screen_RnnnnS[0]) || (out_box_R10S[0][1] > screen_RnnnnS[1])) 
             outvalid_R10H = 1'b0;
         else if (!validTri_R10H) 
             outvalid_R10H = 1'b0;
-        else if (x00*x01 >  x10*x11)
+        else if (y00*y01 >  y10*y11)
                 outvalid_R10H = 1'b0;
         else 
                 outvalid_R10H = 1'b1;
