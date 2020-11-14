@@ -237,7 +237,7 @@ $(DEBUG_LIBRARY): $(VERILOG_FILES)
 DESIGN_TARGET = rast
 
 # The target clock period and area in library units (nS) (um^2). 45 
-CLK_PERIOD=1.2; 
+CLK_PERIOD=1.4; 
 TARGET_AREA=42000;
 
 
