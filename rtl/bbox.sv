@@ -341,10 +341,10 @@ endgenerate
     // Invalid if BBox is up/right of Screen
     // Invalid if BBox is down/left of Screen
     // outvalid_R10H high if validTri_R10H && BBox is valid
-    // logic signed [SIGFIG-1:0] y00;
-    // logic signed [SIGFIG-1:0] y01;
-    // logic signed [SIGFIG-1:0] y10;
-    // logic signed [SIGFIG-1:0] y11;
+    logic signed [SIGFIG-1:0] y00;
+    logic signed [SIGFIG-1:0] y01;
+    logic signed [SIGFIG-1:0] y10;
+    logic signed [SIGFIG-1:0] y11;
 
     logic signed [SIGFIG-12:0] x00;
     logic signed [SIGFIG-12:0] x01;
@@ -353,11 +353,15 @@ endgenerate
     
     always_comb begin
     
-    x00 =(tri_R10S[1][0] - tri_R10S[0][0])[12:0]
-    x01 = (tri_R10S[2][1] - tri_R10S[1][1])[12:0]
-    x10 = (tri_R10S[2][0] - tri_R10S[1][0])[12:0]
-    x11 = (tri_R10S[1][1] - tri_R10S[0][1])[12:0]
+    y00 =(tri_R10S[1][0] - tri_R10S[0][0]);
+    y01 = (tri_R10S[2][1] - tri_R10S[1][1]);
+    y10 = (tri_R10S[2][0] - tri_R10S[1][0]);
+    y11 = (tri_R10S[1][1] - tri_R10S[0][1]);
     
+    x00 = y00[12:0];
+    x01 = y01[12:0];
+    x11 = y11[12:0];
+    x10 = y10[12:0];
    
     end
     always_comb begin
@@ -409,13 +413,11 @@ endgenerate
             outvalid_R10H = 1'b0;
         else if (!validTri_R10H) 
             outvalid_R10H = 1'b0;
-        else 
-            {
-            if (x00 * x01 >  x10 * x11 )
+        else if (x00*x01 >  x10*x11)
                 outvalid_R10H = 1'b0;
-            else 
+        else 
                 outvalid_R10H = 1'b1;
-            }
+            
 
         end /*
         $display("Test 3: Clipping or Rejection");
